@@ -484,7 +484,7 @@ function LineGraph() {
     { name: 'May', Hector: 3000, Bitcoin: 1600, Ethereum: 1400, Dogecoin: 800 },
   ];
 
-  const colors: { [key: string]: string } = {
+  const colors: Record<string, string> = {
     Hector: '#EAB308',
     Bitcoin: '#F7931A',
     Ethereum: '#627EEA',
@@ -501,7 +501,7 @@ function LineGraph() {
             <YAxis stroke="#888" />
             <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
             <Legend />
-            {Object.keys(colors).map((coin) => (
+            {(Object.keys(colors) as Array<keyof typeof colors>).map((coin) => (
               <Line
                 key={coin}
                 type="monotone"
