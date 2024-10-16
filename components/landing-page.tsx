@@ -210,23 +210,15 @@ export function LandingPageComponent() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <nav className="sticky top-0 z-50 flex items-center justify-between py-4 px-6 bg-gray-900 bg-opacity-90 backdrop-filter backdrop-blur-lg">
+      <nav className="sticky top-0 z-50 flex items-center justify-between py-4 px-6 bg-gray-800 bg-opacity-90 backdrop-filter backdrop-blur-lg">
         <div className="flex items-center">
-          <motion.div
-            animate={{
-              rotate: [0, 10, -10, 10, 0],
-              y: [0, -5, 5, -5, 0],
-            }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <Image 
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-tufksTto0P0gQI0oH1CByYpc5rQKEb.jpg"
-              alt="Hector Logo" 
-              width={60} 
-              height={60} 
-              className="mr-4 rounded-full"
-            />
-          </motion.div>
+          <Image 
+            src="/logo1.png"
+            alt="Hector Logo" 
+            width={90} 
+            height={90} 
+            className="mr-4 rounded-full"
+          />  
           <h1 className="text-xl md:text-2xl font-bold text-yellow-500">Hector - The Golden Boy in Crypto</h1>
         </div>
         <div className="hidden md:flex items-center space-x-4">
@@ -289,28 +281,30 @@ export function LandingPageComponent() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl font-bold mb-6 text-yellow-500"
-            >
-              Woof-come to the Paw-ture of Crypto!
-            </motion.h2>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base md:text-lg mb-8"
-            >
-              Hector - The Golden Boy is wagging his tail into the crypto world! With bark-chain technology and paw-some community, we're fetching the future of finance. Join our pack for a howling good time!
-            </motion.p>
-            <div className="space-y-4">
-              <Feature icon={<Users className="text-yellow-500" />} text="Fur-endly Community" />
-              <Feature icon={<Globe className="text-yellow-500" />} text="Worldwide Walkies" />
-              <Feature icon={<Shield className="text-yellow-500" />} text="Guarded by Best Boys" />
-              <Feature icon={<Rocket className="text-yellow-500" />} text="To The Mooooon (We Chase It!)" />
+          <div className="relative p-8 rounded-lg min-h-[400px] md:min-h-[550px] flex flex-col justify-center" style={{
+            backgroundImage: 'url(/logo1.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}>
+            <div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg"></div>
+            <div className="relative z-10">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-3xl md:text-4xl font-bold mb-6 text-yellow-500"
+              >
+                Woof-come to the Paw-ture of Crypto!
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-base md:text-lg mb-8"
+              >
+                Hector - The Golden Boy is wagging his tail into the crypto world! With bark-chain technology and paw-some community, we're fetching the future of finance. Join our pack for a howling good time!
+              </motion.p>
             </div>
           </div>
           <motion.div 
