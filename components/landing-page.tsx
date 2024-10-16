@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Facebook, Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp, Bone } from 'lucide-react'
+import { motion, AnimatePresence, useAnimation } from 'framer-motion'
+import { Facebook, Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp, Bone, Heart, Star, Sun, Cloud, CloudRain, CloudLightning, Snowflake, Download } from 'lucide-react'
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
 import dynamic from 'next/dynamic'
+import useSound from 'use-sound'
+import html2canvas from 'html2canvas'
+import { useInView } from 'react-intersection-observer'
 
 const DynamicConfetti = dynamic(() => import('react-confetti'), { ssr: false })
 
@@ -169,12 +172,241 @@ const BackToTopButton = dynamic(() => Promise.resolve(() => {
   )
 }), { ssr: false })
 
+function HectorsMemoryMatch() {
+  const [cards, setCards] = useState<{id: number, icon: React.ReactElement, flipped: boolean, matched: boolean}[]>([]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [moves, setMoves] = useState(0);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameCompleted, setGameCompleted] = useState(false);
+
+  const cardIcons = [
+    <Bone key="bone" size={40} />,
+    <Rocket key="rocket" size={40} />,
+    <Coins key="coins" size={40} />,
+    <Shield key="shield" size={40} />,
+    <Heart key="heart" size={40} />,
+    <Star key="star" size={40} />,
+  ];
+
+  const initializeGame = () => {
+    const shuffledCards = [...cardIcons, ...cardIcons]
+      .sort(() => Math.random() - 0.5)
+      .map((icon, index) => ({
+        id: index,
+        icon,
+        flipped: false,
+        matched: false
+      }));
+    setCards(shuffledCards);
+    setFlippedCards([]);
+    setMoves(0);
+    setGameStarted(true);
+    setGameCompleted(false);
+  };
+
+  const handleCardClick = (id: number) => {
+    if (!gameStarted || flippedCards.length === 2 || cards[id].flipped || cards[id].matched) return;
+
+    const newFlippedCards = [...flippedCards, id];
+    setFlippedCards(newFlippedCards);
+    setCards(cards.map(card => card.id === id ? {...card, flipped: true} : card));
+
+    if (newFlippedCards.length === 2) {
+      setMoves(moves + 1);
+      const [firstId, secondId] = newFlippedCards;
+      
+      if (
+        cards[firstId] &&
+        cards[secondId] &&
+        cards[firstId].icon &&
+        cards[secondId].icon &&
+        cards[firstId].icon.type === cards[secondId].icon.type
+      ) {
+        setCards(cards.map(card => 
+          card.id === firstId || card.id === secondId ? {...card, matched: true} : card
+        ));
+        setFlippedCards([]);
+      } else {
+        setTimeout(() => {
+          setCards(cards.map(card => 
+            card.id === firstId || card.id === secondId ? {...card, flipped: false} : card
+          ));
+          setFlippedCards([]);
+        }, 1000);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (gameStarted && cards.every(card => card.matched)) {
+      setGameCompleted(true);
+      setGameStarted(false);
+    }
+  }, [cards, gameStarted]);
+
+  return (
+    <div className="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h3 className="text-2xl font-bold text-yellow-400 mb-4">Hector's Memory Match</h3>
+      <div className="grid grid-cols-4 gap-4 mb-4">
+        {cards.map(card => (
+          <motion.div
+            key={card.id}
+            className={`w-24 h-24 bg-yellow-400 rounded-lg cursor-pointer flex items-center justify-center ${card.flipped || card.matched ? '' : 'bg-opacity-50'}`}
+            onClick={() => handleCardClick(card.id)}
+            animate={{ rotateY: card.flipped || card.matched ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="w-full h-full relative flex items-center justify-center" style={{ transform: card.flipped || card.matched ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
+              {(card.flipped || card.matched) && (
+                <div className="text-black">
+                  {card.icon}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      <div className="flex justify-between items-center">
+        <button
+          onClick={initializeGame}
+          className="px-4 py-2 bg-yellow-400 text-black rounded-full font-bold"
+        >
+          {gameStarted ? 'Restart' : 'Start'} Game
+        </button>
+        <span className="text-white">Moves: {moves}</span>
+      </div>
+      {gameCompleted && (
+        <div className="mt-4 text-center">
+          <p className="text-2xl font-bold text-green-400">Game Completed!</p>
+          <p className="text-white">You matched all pairs in {moves} moves.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BarChart() {
+  const data = [
+    { name: 'Hector', value: 90, color: 'bg-yellow-500' },
+    { name: 'Dogecoin', value: 40, color: 'bg-blue-500' },
+    { name: 'Shiba Inu', value: 30, color: 'bg-red-500' },
+    { name: 'Floki Inu', value: 20, color: 'bg-green-500' },
+    { name: 'Pepe Coin', value: 10, color: 'bg-purple-500' },
+  ]
+
+  return (
+    <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between h-64 md:h-80 space-y-4 md:space-y-0 md:space-x-4">
+        {data.map((item, index) => (
+          <div key={item.name} className="flex md:flex-col items-center md:items-center w-full">
+            <div className="w-24 md:w-auto text-xs md:text-sm md:mb-2">{item.name}</div>
+            <div className="flex-grow md:w-16 h-8 md:h-64 bg-gray-700 rounded-full md:rounded overflow-hidden">
+              <motion.div 
+                className={`h-full md:w-full ${item.color} rounded-full md:rounded`}
+                initial={{ width: '0%', height: '0%' }}
+                animate={{ width: '100%', height: `${item.value}%` }}
+                transition={{ duration: 1, delay: index * 0.2 }}
+              />
+            </div>
+            <div className="w-12 md:w-auto text-right md:text-center text-xs md:text-sm font-bold md:mt-2">{item.value}%</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function HectorsCryptoJourney() {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
+  const journeySteps = [
+    { icon: '🚀', text: 'Launch' },
+    { icon: '🌱', text: 'Growth' },
+    { icon: '🤝', text: 'Partnerships' },
+    { icon: '🌍', text: 'Global Adoption' },
+    { icon: '🌕', text: 'Moon' },
+  ];
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={containerVariants}
+      className="bg-gray-800 p-6 rounded-lg shadow-lg"
+    >
+      <h4 className="text-2xl font-bold text-yellow-400 mb-6 text-center">Hector's Crypto Journey</h4>
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-start space-y-6 md:space-y-0 md:space-x-4">
+        {journeySteps.map((step, index) => (
+          <motion.div key={index} className="flex flex-col items-center" variants={itemVariants}>
+            <motion.div
+              className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center text-3xl mb-2"
+              whileHover={{ scale: 1.1, rotate: 360 }}
+              transition={{ duration: 0.5 }}
+            >
+              {step.icon}
+            </motion.div>
+            <p className="text-white text-center">{step.text}</p>
+          </motion.div>
+        ))}
+      </div>
+      <motion.div
+        className="mt-8 h-2 bg-gray-600 rounded-full overflow-hidden"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 2, delay: 1 }}
+      >
+        <motion.div
+          className="h-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"
+          initial={{ x: '-100%' }}
+          animate={{ x: '0%' }}
+          transition={{ duration: 2, delay: 1 }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export function LandingPageComponent() {
   const [isLaunching, setIsLaunching] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [treatCount, setTreatCount] = useState(0)
   const [showCelebration, setShowCelebration] = useState(false)
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [playWoof] = useSound('/woof.mp3')
+  const [playTreat] = useSound('/treat.mp3')
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -228,12 +460,12 @@ export function LandingPageComponent() {
             className="px-6 py-3 bg-yellow-500 text-black rounded-full font-bold text-lg transition duration-300 ease-in-out transform hover:bg-yellow-400"
             onClick={() => setIsLaunching(true)}
           >
-            {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Bone className="inline-block ml-2" />
+            {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Bone className="inline-block ml-2 animate-spin" />
           </motion.button>
           <div className="flex space-x-4">
-            <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-500"><Facebook size={24} /></motion.a>
-            <motion.a whileHover={{ scale: 1.2, rotate: -20 }} href="#" className="text-yellow-500"><Twitter size={24} /></motion.a>
-            <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-500"><Instagram size={24} /></motion.a>
+            <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-300"><Facebook size={24} /></motion.a>
+            <motion.a whileHover={{ scale: 1.2, rotate: -20 }} href="#" className="text-yellow-300"><Twitter size={24} /></motion.a>
+            <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-300"><Instagram size={24} /></motion.a>
           </div>
         </div>
       </nav>
@@ -338,36 +570,43 @@ export function LandingPageComponent() {
         </div>
 
         <div className="mt-20 relative">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector's Treat-o-meter</h3>
-          <div className="max-w-md mx-auto bg-gray-800 p-4 rounded-lg">
-            <div className="relative h-8 bg-gray-700 rounded-full overflow-hidden mb-2">
-              <motion.div 
-                className="h-full bg-yellow-500"
-                initial={{ width: '0%' }}
-                animate={{ width: `${(treatCount / 20) * 100}%` }}
-              />
-              <motion.div
-                className="absolute top-1/2 transform -translate-y-1/2"
-                initial={{ left: 0 }}
-                animate={{ left: `${rocketPosition}%` }}
-                transition={{ type: 'spring', stiffness: 60 }}
-              >
-                <Image 
-                  src="/logo1.png"
-                  alt="Hector Logo" 
-                  width={32}
-                  height={32}
-                  className="rounded-full"
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-300 font-comic">Hector's Funky Treat-o-meter</h3>
+          <div className="max-w-md mx-auto bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-500 p-6 rounded-lg shadow-lg">
+            <div className="bg-black bg-opacity-70 p-4 rounded-lg">
+              <div className="relative h-8 bg-gray-700 rounded-full overflow-hidden mb-2">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-yellow-300 via-pink-500 to-purple-600"
+                  initial={{ width: '0%' }}
+                  animate={{ width: `${(treatCount / 20) * 100}%` }}
                 />
-              </motion.div>
+                <motion.div
+                  className="absolute top-1/2 transform -translate-y-1/2"
+                  initial={{ left: 0 }}
+                  animate={{ left: `${rocketPosition}%` }}
+                  transition={{ type: 'spring', stiffness: 60 }}
+                >
+                  <Image 
+                    src="/logo1.png"
+                    alt="Hector Logo" 
+                    width={32}
+                    height={32}
+                    className="rounded-full animate-pulse"
+                  />
+                </motion.div>
+              </div>
+              <p className="text-center mt-2 font-comic text-white">{treatCount}/20 Treats</p>
+              <motion.button 
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                whileTap={{ scale: 0.95, rotate: -5 }}
+                onClick={() => {
+                  incrementTreats();
+                  playWoof(); // Play the woof sound
+                }}
+                className="mt-4 w-full px-4 py-2 bg-yellow-300 text-black rounded-full font-bold font-comic"
+              >
+                Give Hector a Funky Treat!
+              </motion.button>
             </div>
-            <p className="text-center mt-2">{treatCount}/20 Treats</p>
-            <button 
-              onClick={incrementTreats}
-              className="mt-4 w-full px-4 py-2 bg-yellow-500 text-black rounded-full font-bold"
-            >
-              Give Hector a Treat!
-            </button>
             <AnimatePresence>
               {showCelebration && (
                 <motion.div
@@ -395,10 +634,15 @@ export function LandingPageComponent() {
         </div>
 
         <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-6 text-yellow-500">Hector vs Other Meme Coins (Tail Wag Contest)</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector vs Other Meme Coins (Tail Wag Contest)</h3>
           <div className="max-w-3xl mx-auto">
             <BarChart />
           </div>
+        </div>
+
+        <div className="mt-20">
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Solve Hector's Memory Match!</h3>
+          <HectorsMemoryMatch />
         </div>
 
         <div className="mt-20">
@@ -461,10 +705,8 @@ export function LandingPageComponent() {
         </div>
 
         <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector's Growth Compared to Other Coins</h3>
-          <div className="max-w-4xl mx-auto">
-            <LineGraph />
-          </div>
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector's Crypto Journey</h3>
+          <HectorsCryptoJourney />
         </div>
 
         <div className="mt-20">
@@ -531,81 +773,6 @@ export function LandingPageComponent() {
       <BackToTopButton />
     </div>
   )
-}
-
-function BarChart() {
-  const data = [
-    { name: 'Hector', value: 90, color: 'bg-yellow-500' },
-    { name: 'Dogecoin', value: 40, color: 'bg-blue-500' },
-    { name: 'Shiba Inu', value: 30, color: 'bg-red-500' },
-    { name: 'Floki Inu', value: 20, color: 'bg-green-500' },
-    { name: 'Pepe Coin', value: 10, color: 'bg-purple-500' },
-  ]
-
-  return (
-    <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between h-64 md:h-80 space-y-4 md:space-y-0 md:space-x-4">
-        {data.map((item, index) => (
-          <div key={item.name} className="flex md:flex-col items-center md:items-center w-full">
-            <div className="w-24 md:w-auto text-xs md:text-sm md:mb-2">{item.name}</div>
-            <div className="flex-grow md:w-16 h-8 md:h-64 bg-gray-700 rounded-full md:rounded overflow-hidden">
-              <motion.div 
-                className={`h-full md:w-full ${item.color} rounded-full md:rounded`}
-                initial={{ width: '0%', height: '0%' }}
-                animate={{ width: '100%', height: `${item.value}%` }}
-                transition={{ duration: 1, delay: index * 0.2 }}
-              />
-            </div>
-            <div className="w-12 md:w-auto text-right md:text-center text-xs md:text-sm font-bold md:mt-2">{item.value}%</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function LineGraph() {
-  const data = [
-    { name: 'Jan', Hector: 1000, Bitcoin: 800, Ethereum: 600, Dogecoin: 400 },
-    { name: 'Feb', Hector: 1500, Bitcoin: 1000, Ethereum: 800, Dogecoin: 500 },
-    { name: 'Mar', Hector: 2000, Bitcoin: 1200, Ethereum: 1000, Dogecoin: 600 },
-    { name: 'Apr', Hector: 2500, Bitcoin: 1400, Ethereum: 1200, Dogecoin: 700 },
-    { name: 'May', Hector: 3000, Bitcoin: 1600, Ethereum: 1400, Dogecoin: 800 },
-  ];
-
-  const colors: Record<string, string> = {
-    Hector: '#EAB308',
-    Bitcoin: '#F7931A',
-    Ethereum: '#627EEA',
-    Dogecoin: '#C2A633',
-  };
-
-  return (
-    <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
-      <div className="w-full h-64 md:h-96">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-            <XAxis dataKey="name" stroke="#888" />
-            <YAxis stroke="#888" />
-            <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
-            <Legend />
-            {(Object.keys(colors) as Array<keyof typeof colors>).map((coin) => (
-              <Line
-                key={coin}
-                type="monotone"
-                dataKey={coin}
-                stroke={colors[coin]}
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                activeDot={{ r: 8 }}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
 }
 
 function VerticalImageGallery() {
