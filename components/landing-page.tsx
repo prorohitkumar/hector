@@ -767,7 +767,7 @@ export function LandingPageComponent() {
       </main>
 
       <footer className="bg-gray-900 text-center py-6 mt-12">
-        <p className="text-sm md:text-base">&copy; 2024 Hector - The Goodest Boy in Crypto. All rights re-zoomies-ved.</p>
+        <p className="text-sm md:text-base">&copy; 2024 Hector - The Golden Boy in Crypto. All rights re-zoomies-ved.</p>
       </footer>
 
       <BackToTopButton />
