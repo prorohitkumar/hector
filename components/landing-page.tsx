@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Facebook, Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp } from 'lucide-react'
+import { Facebook, Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp, Bone } from 'lucide-react'
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
 import dynamic from 'next/dynamic'
 
@@ -236,7 +236,7 @@ export function LandingPageComponent() {
             className="px-6 py-3 bg-yellow-500 text-black rounded-full font-bold text-lg transition duration-300 ease-in-out transform hover:bg-yellow-400"
             onClick={() => setIsLaunching(true)}
           >
-            {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Rocket className="inline-block ml-2" />
+            {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Bone className="inline-block ml-2" />
           </motion.button>
           <div className="flex space-x-4">
             <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-500"><Facebook size={24} /></motion.a>
@@ -284,7 +284,7 @@ export function LandingPageComponent() {
             className="w-full px-6 py-3 bg-yellow-500 text-black rounded-full font-bold text-lg transition duration-300 ease-in-out transform hover:bg-yellow-400"
             onClick={() => setIsLaunching(true)}
           >
-            {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Rocket className="inline-block ml-2" />
+            {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Bone className="inline-block ml-2" />
           </motion.button>
         </div>
 
