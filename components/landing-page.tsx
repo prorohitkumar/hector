@@ -170,6 +170,7 @@ export function LandingPageComponent() {
   const [isLaunching, setIsLaunching] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [treatCount, setTreatCount] = useState(0)
+  const [showCelebration, setShowCelebration] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -180,8 +181,39 @@ export function LandingPageComponent() {
   }, [isLaunching])
 
   const incrementTreats = () => {
-    setTreatCount(prev => Math.min(prev + 1, 10))
+    setTreatCount(prev => {
+      const newCount = Math.min(prev + 1, 20)
+      if (newCount === 20) {
+        setShowCelebration(true)
+        setTimeout(() => setShowCelebration(false), 5000) // Hide celebration after 5 seconds
+      }
+      return newCount
+    })
   }
+
+  const rocketPosition = (treatCount / 20) * 100
+
+  // Confetti animation
+  const confetti = [...Array(50)].map((_, i) => (
+    <motion.div
+      key={i}
+      className="w-2 h-2 bg-yellow-500 rounded-full"
+      initial={{ 
+        x: Math.random() * window.innerWidth, 
+        y: -10,
+        opacity: 1
+      }}
+      animate={{ 
+        y: window.innerHeight,
+        opacity: 0
+      }}
+      transition={{ 
+        duration: Math.random() * 2 + 1,
+        repeat: Infinity,
+        repeatDelay: Math.random() * 2
+      }}
+    />
+  ))
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -318,6 +350,54 @@ export function LandingPageComponent() {
           </motion.div>
         </div>
 
+        <div className="mt-20 relative">
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector's Treat-o-meter</h3>
+          <div className="max-w-md mx-auto bg-gray-800 p-4 rounded-lg">
+            <div className="relative h-8 bg-gray-700 rounded-full overflow-hidden mb-2">
+              <motion.div 
+                className="h-full bg-yellow-500"
+                initial={{ width: '0%' }}
+                animate={{ width: `${(treatCount / 20) * 100}%` }}
+              />
+              <motion.div
+                className="absolute top-1/2 transform -translate-y-1/2"
+                initial={{ left: 0 }}
+                animate={{ left: `${rocketPosition}%` }}
+                transition={{ type: 'spring', stiffness: 60 }}
+              >
+                <Rocket size={24} className="text-white" />
+              </motion.div>
+            </div>
+            <p className="text-center mt-2">{treatCount}/20 Treats</p>
+            <button 
+              onClick={incrementTreats}
+              className="mt-4 w-full px-4 py-2 bg-yellow-500 text-black rounded-full font-bold"
+            >
+              Give Hector a Treat!
+            </button>
+            <AnimatePresence>
+              {showCelebration && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <div className="bg-black bg-opacity-70 p-6 rounded-lg text-center">
+                    <h4 className="text-2xl font-bold text-yellow-500 mb-2">Woohoo! 🎉</h4>
+                    <p className="text-white">Hector has reached the moon!</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          {showCelebration && (
+            <div className="absolute inset-0 pointer-events-none">
+              {confetti}
+            </div>
+          )}
+        </div>
+
         <div className="mt-20">
           <h3 className="text-2xl md:text-3xl font-bold text-center mb-6 text-yellow-500">Hector vs Other Meme Coins (Tail Wag Contest)</h3>
           <div className="max-w-3xl mx-auto">
@@ -445,26 +525,6 @@ export function LandingPageComponent() {
         <div className="mt-20">
           <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Postcards from Hector</h3>
           <VerticalImageGallery />
-        </div>
-
-        <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector's Treat-o-meter</h3>
-          <div className="max-w-md mx-auto bg-gray-800 p-4 rounded-lg">
-            <div className="h-8 bg-gray-700 rounded-full overflow-hidden">
-              <motion.div 
-                className="h-full bg-yellow-500"
-                initial={{ width: '0%' }}
-                animate={{ width: `${treatCount * 10}%` }}
-              />
-            </div>
-            <p className="text-center mt-2">{treatCount}/10 Treats</p>
-            <button 
-              onClick={incrementTreats}
-              className="mt-4 w-full px-4 py-2 bg-yellow-500 text-black rounded-full font-bold"
-            >
-              Give Hector a Treat!
-            </button>
-          </div>
         </div>
       </main>
 
