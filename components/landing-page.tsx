@@ -5,6 +5,9 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Facebook, Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp } from 'lucide-react'
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
+import dynamic from 'next/dynamic'
+
+const DynamicConfetti = dynamic(() => import('react-confetti'), { ssr: false })
 
 interface FeatureProps {
   icon: React.ReactNode;
@@ -123,7 +126,7 @@ function RoadmapItem({ phase, title, description, icon }: RoadmapItemProps) {
   )
 }
 
-function BackToTopButton() {
+const BackToTopButton = dynamic(() => Promise.resolve(() => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -164,13 +167,14 @@ function BackToTopButton() {
       )}
     </>
   )
-}
+}), { ssr: false })
 
 export function LandingPageComponent() {
   const [isLaunching, setIsLaunching] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [treatCount, setTreatCount] = useState(0)
   const [showCelebration, setShowCelebration] = useState(false)
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -179,6 +183,17 @@ export function LandingPageComponent() {
 
     return () => clearTimeout(timer)
   }, [isLaunching])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const incrementTreats = () => {
     setTreatCount(prev => {
@@ -192,28 +207,6 @@ export function LandingPageComponent() {
   }
 
   const rocketPosition = (treatCount / 20) * 100
-
-  // Confetti animation
-  const confetti = [...Array(50)].map((_, i) => (
-    <motion.div
-      key={i}
-      className="w-2 h-2 bg-yellow-500 rounded-full"
-      initial={{ 
-        x: Math.random() * window.innerWidth, 
-        y: -10,
-        opacity: 1
-      }}
-      animate={{ 
-        y: window.innerHeight,
-        opacity: 0
-      }}
-      transition={{ 
-        duration: Math.random() * 2 + 1,
-        repeat: Infinity,
-        repeatDelay: Math.random() * 2
-      }}
-    />
-  ))
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -392,9 +385,12 @@ export function LandingPageComponent() {
             </AnimatePresence>
           </div>
           {showCelebration && (
-            <div className="absolute inset-0 pointer-events-none">
-              {confetti}
-            </div>
+            <DynamicConfetti
+              width={windowSize.width}
+              height={windowSize.height}
+              recycle={false}
+              numberOfPieces={200}
+            />
           )}
         </div>
 
