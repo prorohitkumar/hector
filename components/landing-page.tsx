@@ -484,7 +484,7 @@ function LineGraph() {
     { name: 'May', Hector: 3000, Bitcoin: 1600, Ethereum: 1400, Dogecoin: 800 },
   ];
 
-  const colors = {
+  const colors: { [key: string]: string } = {
     Hector: '#EAB308',
     Bitcoin: '#F7931A',
     Ethereum: '#627EEA',
