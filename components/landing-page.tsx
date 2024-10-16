@@ -202,7 +202,7 @@ export function LandingPageComponent() {
               className="mr-4 rounded-full"
             />
           </motion.div>
-          <h1 className="text-xl md:text-2xl font-bold text-yellow-500">Hector - The Goodest Boy in Crypto</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-yellow-500">Hector - The Golden Boy in Crypto</h1>
         </div>
         <div className="hidden md:flex items-center space-x-4">
           <motion.button
