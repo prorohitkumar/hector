@@ -279,12 +279,12 @@ export function LandingPageComponent() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-base md:text-lg mb-8"
             >
-              Hector - The Goodest Boy is wagging his tail into the crypto world! With bark-chain technology and paw-some community, we're fetching the future of finance. Join our pack for a howling good time!
+              Hector - The Golden Boy is wagging his tail into the crypto world! With bark-chain technology and paw-some community, we're fetching the future of finance. Join our pack for a howling good time!
             </motion.p>
             <div className="space-y-4">
               <Feature icon={<Users className="text-yellow-500" />} text="Fur-endly Community" />
               <Feature icon={<Globe className="text-yellow-500" />} text="Worldwide Walkies" />
-              <Feature icon={<Shield className="text-yellow-500" />} text="Guarded by Goodest Boys" />
+              <Feature icon={<Shield className="text-yellow-500" />} text="Guarded by Best Boys" />
               <Feature icon={<Rocket className="text-yellow-500" />} text="To The Mooooon (We Chase It!)" />
             </div>
           </div>
