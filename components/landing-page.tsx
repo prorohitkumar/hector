@@ -352,7 +352,13 @@ export function LandingPageComponent() {
                 animate={{ left: `${rocketPosition}%` }}
                 transition={{ type: 'spring', stiffness: 60 }}
               >
-                <Rocket size={24} className="text-white" />
+                <Image 
+                  src="/logo1.png"
+                  alt="Hector Logo" 
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
               </motion.div>
             </div>
             <p className="text-center mt-2">{treatCount}/20 Treats</p>
