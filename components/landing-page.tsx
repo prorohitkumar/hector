@@ -15,7 +15,7 @@ const DynamicConfetti = dynamic(() => import('react-confetti'), { ssr: false })
 interface FeatureProps {
   icon: React.ReactNode;
   text: string;
-}
+} 
 
 function Feature({ icon, text }: FeatureProps) {
   return (
@@ -161,7 +161,7 @@ const BackToTopButton = dynamic(() => Promise.resolve(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
-          className="fixed right-4 bottom-20 z-50 bg-yellow-500 text-black p-3 rounded-full shadow-lg"
+          className="bg-yellow-500 text-black p-3 rounded-full shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
@@ -548,7 +548,7 @@ export function LandingPageComponent() {
       </nav>
 
       {/* Mobile hamburger menu */}
-      <div className="md:hidden fixed right-4 bottom-4 z-50">
+      <div className="md:hidden fixed right-4 bottom-24 z-50">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -559,6 +559,11 @@ export function LandingPageComponent() {
         </motion.button>
       </div>
 
+      {/* Back to Top Button - moved to the bottom */}
+      <div className="fixed right-4 bottom-4 z-50">
+        <BackToTopButton />
+      </div>
+
       {/* Mobile social media menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -566,16 +571,34 @@ export function LandingPageComponent() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="md:hidden fixed right-4 bottom-20 z-50 bg-gray-800 rounded-lg p-4 shadow-lg"
+            className="md:hidden fixed right-4 bottom-40 z-50 bg-gray-800 rounded-lg p-4 shadow-lg"
           >
             <div className="flex flex-col space-y-4">
-              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500">
+              <motion.a 
+                whileHover={{ scale: 1.2 }} 
+                href="https://x.com/Thegoldenboy_H?t=g1tc3LtV42ixn96sII1W-A&s=08"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-yellow-500"
+              >
                 <Twitter size={24} />
               </motion.a>
-              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500">
+              <motion.a 
+                whileHover={{ scale: 1.2 }} 
+                href="https://www.instagram.com/hector_thegoldenboy/profilecard/?igsh=dzQ2azF4NDJqY21h"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-yellow-500"
+              >
                 <Instagram size={24} />
               </motion.a>
-              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500">
+              <motion.a 
+                whileHover={{ scale: 1.2 }} 
+                href="https://t.me/+E_PIo8OVzDk5YWI9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-yellow-500"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.133 1.598-5.724 2.21a405.15 405.15 0 0 1-2.849 1.09c-.42.147-.99.332-1.473.901-.728.968.193 1.798.919 2.286 1.61.516 3.275 1.009 4.654 1.472.509 1.793.997 3.592 1.48 5.388.16.36.506.494.864.498.355.004.857-.106 1.045-.444l2.315-4.393c.653.005 1.394.02 2.069-.04 1.17-.095 1.87-.53 2.309-.802.923-.565 1.087-.934 1.834-1.517.941-.737 1.875-1.477 2.777-2.24 1.186-1.02 2.358-2.062 3.591-3.016.481-.376 1.07-.779 1.222-1.344.148-.563-.245-.716-.572-.808-.692-.208-1.267-.418-1.948-.689l-2.405-.84a1.911 1.911 0 0 0-.439-.08z"/>
                 </svg>
@@ -780,8 +803,6 @@ export function LandingPageComponent() {
       <footer className="bg-gray-900 text-center py-6 mt-12">
         <p className="text-sm md:text-base">&copy; 2024 Hector - The Golden Boy in Crypto. All rights re-zoomies-ved.</p>
       </footer>
-
-      <BackToTopButton />
     </div>
   )
 }
