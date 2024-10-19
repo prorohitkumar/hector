@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
-import { Facebook, Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp, Bone, Heart, Star, Sun, Cloud, CloudRain, CloudLightning, Snowflake, Download } from 'lucide-react'
+import { Twitter, Instagram, Rocket, Zap, DollarSign, Shield, Users, Globe, Lock, Coins, TrendingUp, Menu, Sparkles, Cpu, Network, Megaphone, ArrowUp, Bone, Heart, Star, Sun, Cloud, CloudRain, CloudLightning, Snowflake, Download } from 'lucide-react'
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
 import dynamic from 'next/dynamic'
 import useSound from 'use-sound'
@@ -399,6 +399,54 @@ function HectorsCryptoJourney() {
   );
 }
 
+// Add this interface near the top of the file, with other interfaces
+interface Postcard {
+  src: string;
+  alt: string;
+  caption: string;
+}
+
+// Add this hook before the LandingPageComponent
+function usePostcards(): Postcard[] {
+  const [postcards, setPostcards] = useState<Postcard[]>([]);
+
+  useEffect(() => {
+    // This is where you'd typically fetch your postcards data
+    // For now, we'll use static data
+    const staticPostcards: Postcard[] = [
+      {
+        src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8afb8c2a-cc62-4343-a3e2-46779d876d54-Qo4fvMRR4Quzl3KtiKOz1pRdV3Mj3z.JPG",
+        alt: "Hector with helmet",
+        caption: "Ready for a new adventure!"
+      },
+      {
+        src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8e206447-bcdf-4e2a-99c5-5a4cedd1617d-C8Pyp9ES333oC2iDrH1WUnqUxqA0Rp.JPG",
+        alt: "Hector on stone steps",
+        caption: "Greetings from Hector's favorite spot!"
+      },
+      {
+        src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/unnamed%20(1)-rr2rmNupe1tcvY3LdkjQIsUmJXt68h.jpg",
+        alt: "Hector with pink bows",
+        caption: "Feeling pretty with my pink bows!"
+      },
+      {
+        src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/72c1e84b-73a9-4a2e-abc1-68c57f393462-Atx8W1jOAqart8SIn3PHw5qPVICEhp.JPG",
+        alt: "Hector on floral couch",
+        caption: "Relaxing on my favorite couch"
+      },
+      {
+        src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7756bff9-da31-4967-96f9-23e1bef3d20c-pM9icIvMCVcAQDroWubFfZ3lOYL2Op.JPG",
+        alt: "Hector looking sleepy",
+        caption: "Just woke up from a golden nap!"
+      }
+    ];
+
+    setPostcards(staticPostcards);
+  }, []);
+
+  return postcards;
+}
+
 export function LandingPageComponent() {
   const [isLaunching, setIsLaunching] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -440,6 +488,9 @@ export function LandingPageComponent() {
 
   const rocketPosition = (treatCount / 20) * 100
 
+  const allPostcards = usePostcards();
+  const [firstTwoPostcards, remainingPostcards] = [allPostcards.slice(0, 2), allPostcards.slice(2)];
+
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="sticky top-0 z-50 flex items-center justify-between py-4 px-6 bg-gray-800 bg-opacity-90 backdrop-filter backdrop-blur-lg">
@@ -453,7 +504,7 @@ export function LandingPageComponent() {
           />  
           <h1 className="text-xl md:text-2xl font-bold text-yellow-500">Hector - The Golden Boy in Crypto</h1>
         </div>
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-6">
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 0 8px rgb(234, 179, 8)" }}
             whileTap={{ scale: 0.95 }}
@@ -462,10 +513,36 @@ export function LandingPageComponent() {
           >
             {isLaunching ? 'Fetching Stick...' : 'Throw the Stick!'} <Bone className="inline-block ml-2 animate-spin" />
           </motion.button>
-          <div className="flex space-x-4">
-            <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-300"><Facebook size={24} /></motion.a>
-            <motion.a whileHover={{ scale: 1.2, rotate: -20 }} href="#" className="text-yellow-300"><Twitter size={24} /></motion.a>
-            <motion.a whileHover={{ scale: 1.2, rotate: 20 }} href="#" className="text-yellow-300"><Instagram size={24} /></motion.a>
+          <div className="flex items-center space-x-4">
+            <motion.a 
+              whileHover={{ scale: 1.2, rotate: -20 }} 
+              href="https://x.com/Thegoldenboy_H?t=g1tc3LtV42ixn96sII1W-A&s=08"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-yellow-300"
+            >
+              <Twitter size={24} />
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.2, rotate: 20 }} 
+              href="https://www.instagram.com/hector_thegoldenboy/profilecard/?igsh=dzQ2azF4NDJqY21h"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-yellow-300"
+            >
+              <Instagram size={24} />
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.2, rotate: -20 }} 
+              href="https://t.me/+E_PIo8OVzDk5YWI9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-yellow-300"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.133 1.598-5.724 2.21a405.15 405.15 0 0 1-2.849 1.09c-.42.147-.99.332-1.473.901-.728.968.193 1.798.919 2.286 1.61.516 3.275 1.009 4.654 1.472.509 1.793.997 3.592 1.48 5.388.16.36.506.494.864.498.355.004.857-.106 1.045-.444l2.315-4.393c.653.005 1.394.02 2.069-.04 1.17-.095 1.87-.53 2.309-.802.923-.565 1.087-.934 1.834-1.517.941-.737 1.875-1.477 2.777-2.24 1.186-1.02 2.358-2.062 3.591-3.016.481-.376 1.07-.779 1.222-1.344.148-.563-.245-.716-.572-.808-.692-.208-1.267-.418-1.948-.689l-2.405-.84a1.911 1.911 0 0 0-.439-.08z"/>
+              </svg>
+            </motion.a>
           </div>
         </div>
       </nav>
@@ -492,9 +569,17 @@ export function LandingPageComponent() {
             className="md:hidden fixed right-4 bottom-20 z-50 bg-gray-800 rounded-lg p-4 shadow-lg"
           >
             <div className="flex flex-col space-y-4">
-              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500"><Facebook size={24} /></motion.a>
-              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500"><Twitter size={24} /></motion.a>
-              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500"><Instagram size={24} /></motion.a>
+              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500">
+                <Twitter size={24} />
+              </motion.a>
+              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500">
+                <Instagram size={24} />
+              </motion.a>
+              <motion.a whileHover={{ scale: 1.2 }} href="#" className="text-yellow-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.133 1.598-5.724 2.21a405.15 405.15 0 0 1-2.849 1.09c-.42.147-.99.332-1.473.901-.728.968.193 1.798.919 2.286 1.61.516 3.275 1.009 4.654 1.472.509 1.793.997 3.592 1.48 5.388.16.36.506.494.864.498.355.004.857-.106 1.045-.444l2.315-4.393c.653.005 1.394.02 2.069-.04 1.17-.095 1.87-.53 2.309-.802.923-.565 1.087-.934 1.834-1.517.941-.737 1.875-1.477 2.777-2.24 1.186-1.02 2.358-2.062 3.591-3.016.481-.376 1.07-.779 1.222-1.344.148-.563-.245-.716-.572-.808-.692-.208-1.267-.418-1.948-.689l-2.405-.84a1.911 1.911 0 0 0-.439-.08z"/>
+                </svg>
+              </motion.a>
             </div>
           </motion.div>
         )}
@@ -513,7 +598,36 @@ export function LandingPageComponent() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="relative p-8 rounded-lg min-h-[400px] md:min-h-[550px] flex flex-col justify-center" style={{
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative order-1 md:order-1"
+          >
+            <motion.div
+              animate={{
+                rotate: [0, 5, -5, 5, 0],
+                y: [0, -10, 10, -10, 0],
+              }}
+              transition={{
+                duration: 5,
+                ease: "easeInOut",
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 1
+              }}
+            >
+              <Image 
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/side-RzCAyG9UqiDP6mvxDhCnnCwGQea5pe.jpg"
+                alt="Hector in Space" 
+                width={500} 
+                height={500} 
+                className="rounded-lg shadow-lg"
+              />
+            </motion.div>
+          </motion.div>
+          
+          <div className="relative p-8 rounded-lg min-h-[400px] md:min-h-[550px] flex flex-col justify-center order-2 md:order-2" style={{
             backgroundImage: 'url(/logo1.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -539,34 +653,6 @@ export function LandingPageComponent() {
               </motion.p>
             </div>
           </div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="relative"
-          >
-            <motion.div
-              animate={{
-                rotate: [0, 5, -5, 5, 0],
-                y: [0, -10, 10, -10, 0],
-              }}
-              transition={{
-                duration: 5,
-                ease: "easeInOut",
-                times: [0, 0.2, 0.5, 0.8, 1],
-                repeat: Infinity,
-                repeatDelay: 1
-              }}
-            >
-              <Image 
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/side-RzCAyG9UqiDP6mvxDhCnnCwGQea5pe.jpg"
-                alt="Hector in Space" 
-                width={500} 
-                height={500} 
-                className="rounded-lg shadow-lg"
-              />
-            </motion.div>
-          </motion.div>
         </div>
 
         <div className="mt-20 relative">
@@ -641,67 +727,13 @@ export function LandingPageComponent() {
         </div>
 
         <div className="mt-20">
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Postcards from Hector</h3>
+          <VerticalImageGallery postcards={firstTwoPostcards} />
+        </div>
+
+        <div className="mt-20">
           <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Solve Hector's Memory Match!</h3>
           <HectorsMemoryMatch />
-        </div>
-
-        <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Why Choose Hector?</h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <InfoCard 
-              image="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/og3-epLxE0iITgJhEjxX24bUDJ5Y0yoXqp.jpg"
-              title="Community-Driven Development"
-              description="Be part of a vibrant ecosystem where your voice matters. Hector's community-driven approach ensures that every holder has a say in the project's future."
-            />
-            <InfoCard 
-              image="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/go1-YH5KE2egqdBeLhUKt7XNumDsiDgvAw.jpg"
-              title="Innovative Tokenomics"
-              description="Experience a well-designed token economy that encourages long-term holding and community participation, creating a stable and growing ecosystem."
-            />
-            <InfoCard 
-              image="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/og2-4oHj4OJkcZ2IBUwYXZkowIaFoWDDx3.jpg"
-              title="Transparent Development"
-              description="Stay informed with regular updates and open communication from our dedicated team. We believe in full transparency to build trust within our community."
-            />
-          </div>
-        </div>
-
-        <div className="mt-20 text-center">
-          <h3 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-500">Ready to Join the Revolution?</h3>
-          <p className="text-lg mb-8">Be part of the next big thing in crypto. Join Hector's community and help shape the future of finance.</p>
-          <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 0 12px rgb(234, 179, 8)" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-yellow-500 text-black rounded-full font-bold text-xl transition duration-300 ease-in-out transform hover:bg-yellow-400"
-          >
-            Join the Hector Revolution <Rocket className="inline-block ml-2" />
-          </motion.button>
-        </div>
-
-        <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">The Hector Advantage</h3>
-          <div className="grid md:grid-cols-2 gap-8">
-            <AdvantageCard 
-              icon={<Users size={40} className="text-yellow-500" />}
-              title="Community-Centric"
-              description="Be part of a movement where your voice matters. Hector's governance model puts the power in your hands, allowing you to shape the future of the platform alongside a community of like-minded innovators."
-            />
-            <AdvantageCard 
-              icon={<Shield size={40} className="text-yellow-500" />}
-              title="Uncompromising Security"
-              description="Your assets are our top priority. With state-of-the-art encryption and multi-layer security protocols, Hector provides a fortress for your investments."
-            />
-            <AdvantageCard 
-              icon={<Rocket size={40} className="text-yellow-500" />}
-              title="Innovative Roadmap"
-              description="Experience a well-planned journey to the moon. Hector's roadmap is designed to bring continuous improvements and exciting new features to our community."
-            />
-            <AdvantageCard 
-              icon={<Globe size={40} className="text-yellow-500" />}
-              title="Global Accessibility"
-              description="Join a truly global community. Hector is designed to be accessible to everyone, regardless of their location, fostering a diverse and inclusive ecosystem."
-            />
-          </div>
         </div>
 
         <div className="mt-20">
@@ -710,24 +742,8 @@ export function LandingPageComponent() {
         </div>
 
         <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Hector's Ecosystem</h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <EcosystemCard 
-              icon={<Globe size={40} className="text-yellow-500" />}
-              title="Global Community"
-              description="Join a worldwide network of Hector enthusiasts. Our diverse community spans across continents, bringing together people from all walks of life."
-            />
-            <EcosystemCard 
-              icon={<Lock size={40} className="text-yellow-500" />}
-              title="Smart Contracts"
-              description="Leverage the power of blockchain with Hector's smart contracts. Automate transactions and agreements with unparalleled security and efficiency."
-            />
-            <EcosystemCard 
-              icon={<Users size={40} className="text-yellow-500" />}
-              title="Community Governance"
-              description="Have a say in Hector's future. Our community-driven governance model allows token holders to propose and vote on important decisions."
-            />
-          </div>
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">More Postcards from Hector</h3>
+          <VerticalImageGallery postcards={remainingPostcards} />
         </div>
 
         <div className="mt-20">
@@ -759,11 +775,6 @@ export function LandingPageComponent() {
             />
           </div>
         </div>
-
-        <div className="mt-20">
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-10 text-yellow-500">Postcards from Hector</h3>
-          <VerticalImageGallery />
-        </div>
       </main>
 
       <footer className="bg-gray-900 text-center py-6 mt-12">
@@ -775,99 +786,31 @@ export function LandingPageComponent() {
   )
 }
 
-function VerticalImageGallery() {
-  const [quotes, setQuotes] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const images = [
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8afb8c2a-cc62-4343-a3e2-46779d876d54-Qo4fvMRR4Quzl3KtiKOz1pRdV3Mj3z.JPG",
-      alt: "Hector with helmet",
-      caption: "Ready for a new adventure!"
-    },
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8e206447-bcdf-4e2a-99c5-5a4cedd1617d-C8Pyp9ES333oC2iDrH1WUnqUxqA0Rp.JPG",
-      alt: "Hector on stone steps",
-      caption: "Greetings from Hector's favorite spot!"
-    },
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/unnamed%20(1)-rr2rmNupe1tcvY3LdkjQIsUmJXt68h.jpg",
-      alt: "Hector with pink bows",
-      caption: "Feeling pretty with my pink bows!"
-    },
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/72c1e84b-73a9-4a2e-abc1-68c57f393462-Atx8W1jOAqart8SIn3PHw5qPVICEhp.JPG",
-      alt: "Hector on floral couch",
-      caption: "Relaxing on my favorite couch"
-    },
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7756bff9-da31-4967-96f9-23e1bef3d20c-pM9icIvMCVcAQDroWubFfZ3lOYL2Op.JPG",
-      alt: "Hector looking sleepy",
-      caption: "Just woke up from a golden nap!"
-    }
-  ]
-
-  useEffect(() => {
-    const fetchQuotes = async () => {
-      setLoading(true);
-      try {
-        const quotePromises = images.map(() => 
-          fetch('https://api.quotable.io/random')
-            .then(res => res.json())
-            .then(data => data.content)
-        );
-        const fetchedQuotes = await Promise.all(quotePromises);
-        setQuotes(fetchedQuotes);
-      } catch (error) {
-        console.error('Error fetching quotes:', error);
-        setQuotes(Array(images.length).fill('Crypto is the future of finance!'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuotes();
-  }, []);  // Empty dependency array means this effect runs once on mount
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
+function VerticalImageGallery({ postcards }: { postcards: Postcard[] }) {
   return (
     <div className="space-y-8 max-w-xl mx-auto">
-      {images.map((image, index) => (
-        <React.Fragment key={index}>
-          <motion.div
-            className="bg-gray-800 p-4 rounded-lg shadow-lg border-4 border-yellow-500"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-          >
-            <div className={`relative w-full h-80 mb-4 rounded-lg overflow-hidden ${index === 0 ? 'first-image' : ''}`}>
-              <Image
-                src={image.src}
-                alt={image.alt}
-                layout="fill"
-                objectFit="cover"
-                className={`rounded-lg image-zoom ${index === 0 ? 'object-top' : 'object-center'}`}
-                style={index === 0 ? { objectPosition: 'center -40px' } : {}}
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-yellow-500 text-lg font-semibold mb-2">{image.caption}</p>
-              <p className="text-gray-300 text-sm">Woof woof, Hector</p>
-            </div>
-          </motion.div>
-          {index < images.length - 1 && (
-            <motion.div
-              className="bg-gray-800 p-4 rounded-lg shadow-lg my-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: (index * 0.2) + 0.1 }}
-            >
-              <p className="text-yellow-500 text-lg italic">"{quotes[index]}"</p>
-            </motion.div>
-          )}
-        </React.Fragment>
+      {postcards.map((postcard, index) => (
+        <motion.div
+          key={index}
+          className="bg-gray-800 p-4 rounded-lg shadow-lg border-4 border-yellow-500"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: index * 0.2 }}
+        >
+          <div className="relative w-full h-80 mb-4 rounded-lg overflow-hidden">
+            <Image
+              src={postcard.src}
+              alt={postcard.alt}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg image-zoom"
+            />
+          </div>
+          <div className="text-center">
+            <p className="text-yellow-500 text-lg font-semibold mb-2">{postcard.caption}</p>
+            <p className="text-gray-300 text-sm">Woof woof, Hector</p>
+          </div>
+        </motion.div>
       ))}
     </div>
   );
